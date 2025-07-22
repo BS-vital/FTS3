@@ -335,9 +335,18 @@
             }
         ];
 
-        // Initialize item statuses and scores
+        // Initialize item statuses and scores globally, ensuring all items have a default state
         const itemStatuses = {}; // Stores 'P', 'S', 'F', or '' for each item
         const itemScores = {};   // Stores 2, 1, 0 for each item
+
+        // Populate initial default states for all items based on evaluationData
+        evaluationData.forEach((section, sectionIndex) => {
+            section.items.forEach((itemText, itemIndex) => {
+                const itemId = `item-${sectionIndex}-${itemIndex}`;
+                itemStatuses[itemId] = ''; // Default to empty string (no selection)
+                itemScores[itemId] = 0;     // Default to 0 points
+            });
+        });
 
         // Get DOM elements
         const evaluationSectionsDiv = document.getElementById('evaluation-sections');
@@ -378,7 +387,7 @@
         function saveEvaluationState() {
             try {
                 localStorage.setItem('cadetEvaluationState', JSON.stringify(itemStatuses));
-                // console.log('Evaluation state saved.');
+                // console.log('Evaluation state saved.'); // For debugging
             } catch (e) {
                 console.error('Error saving to local storage:', e);
                 showMessageBox('Error saving evaluation state.', 'error');
@@ -393,9 +402,10 @@
                 const savedState = localStorage.getItem('cadetEvaluationState');
                 if (savedState) {
                     const parsedState = JSON.parse(savedState);
-                    // Apply loaded state to itemStatuses and calculate scores
+                    // Iterate over the parsed state and apply to itemStatuses
                     for (const itemId in parsedState) {
-                        if (itemStatuses.hasOwnProperty(itemId)) { // Ensure item exists in current structure
+                        // Only update if the item actually exists in our current evaluationData structure
+                        if (itemStatuses.hasOwnProperty(itemId)) {
                             itemStatuses[itemId] = parsedState[itemId];
                             const status = parsedState[itemId];
                             if (status === 'P') {
@@ -407,7 +417,6 @@
                             }
                         }
                     }
-                    // console.log('Evaluation state loaded.');
                     showMessageBox('Previous evaluation state loaded!');
                 }
             } catch (e) {
@@ -436,11 +445,8 @@
                 // Items within the section
                 section.items.forEach((itemText, itemIndex) => {
                     const itemId = `item-${sectionIndex}-${itemIndex}`;
-                    // Initialize status and score if not already set (e.g., from import or load)
-                    if (itemStatuses[itemId] === undefined) {
-                        itemStatuses[itemId] = ''; // Default to empty string (no selection)
-                        itemScores[itemId] = 0;     // Default to 0 points
-                    }
+                    // itemStatuses and itemScores are now pre-initialized globally,
+                    // so no need to check for undefined here.
 
                     const itemDiv = document.createElement('div');
                     itemDiv.className = 'evaluation-item';
@@ -476,7 +482,7 @@
                         input.dataset.status = option.status;
                         input.dataset.itemId = itemId;
 
-                        // Set 'checked' if status matches
+                        // Set 'checked' if status matches the current item's status
                         if (itemStatuses[itemId] === option.status) {
                             input.checked = true;
                         }
@@ -587,6 +593,7 @@
                 return;
             }
 
+            // Reset all statuses and scores
             for (const itemId in itemStatuses) {
                 itemStatuses[itemId] = ''; // Set to empty status
                 itemScores[itemId] = 0;     // Set score to 0
@@ -617,6 +624,7 @@
             const lines = content.split('\n');
 
             // Reset all statuses and scores before importing
+            // This is crucial to ensure a clean slate before applying imported data
             for (const key in itemStatuses) {
                 itemStatuses[key] = '';
                 itemScores[key] = 0;
@@ -681,7 +689,8 @@
          */
         function copyToClipboard() {
             const textToCopy = exportedOutputDiv.textContent;
-            // Use execCommand for broader compatibility in iframes
+            // Use execCommand for broader compatibility in iframes as navigator.clipboard.writeText()
+            // might be restricted in some iframe environments.
             const tempTextArea = document.createElement('textarea');
             tempTextArea.value = textToCopy;
             document.body.appendChild(tempTextArea);
@@ -712,8 +721,9 @@
 
         // Initialize the evaluation site on page load
         document.addEventListener('DOMContentLoaded', () => {
-            loadEvaluationState(); // Load state first
-            renderEvaluationSections();
+            // Load state AFTER initial global itemStatuses population
+            loadEvaluationState();
+            renderEvaluationSections(); // Render UI based on loaded or default state
             viewEvaluationButton.addEventListener('click', toggleEvaluationView);
             importButton.addEventListener('click', handleImport);
             toggleImportTextareaButton.addEventListener('click', toggleImportArea);
