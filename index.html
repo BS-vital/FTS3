@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Field Training Session #3 - Observatory/Eval Phase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .score-panel {
+            background: #34495e;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .score-info {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-item .label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .score-item .value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .pass-status {
+            font-size: 1.5em;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .pass-status.pass {
+            background: #27ae60;
+            color: white;
+        }
+
+        .pass-status.fail {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .scoring-legend {
+            background: #ecf0f1;
+            padding: 20px;
+            border-bottom: 1px solid #bdc3c7;
+        }
+
+        .scoring-legend h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .legend-items {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .section-score {
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .section-content {
+            padding: 20px;
+        }
+
+        .evaluation-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+
+        .evaluation-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .item-text {
+            margin-bottom: 10px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .score-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .score-btn {
+            padding: 8px 16px;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .score-btn.p {
+            border-color: #27ae60;
+            color: #27ae60;
+        }
+
+        .score-btn.p.active {
+            background: #27ae60;
+            color: white;
+        }
+
+        .score-btn.s {
+            border-color: #f39c12;
+            color: #f39c12;
+        }
+
+        .score-btn.s.active {
+            background: #f39c12;
+            color: white;
+        }
+
+        .score-btn.f {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .score-btn.f.active {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .score-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .score-panel {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .score-info {
+                justify-content: center;
+            }
+
+            .legend-items {
+                justify-content: center;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .score-buttons {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>FIELD TRAINING SESSION #3</h1>
+            <p>Observatory/Eval Phase</p>
+        </div>
+
+        <div class="score-panel">
+            <div class="score-info">
+                <div class="score-item">
+                    <div class="label">Current Score</div>
+                    <div class="value" id="currentScore">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="label">Total Points</div>
+                    <div class="value">100</div>
+                </div>
+                <div class="score-item">
+                    <div class="label">Percentage</div>
+                    <div class="value" id="percentage">0%</div>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+                <div class="pass-status" id="passStatus">Not Evaluated</div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="resetEvaluation()" style="padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em;">Reset</button>
+                    <button onclick="exportResults()" style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em;">Export</button>
+                    <button onclick="printResults()" style="padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em;">Print</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="scoring-legend">
+            <h3>Scoring System</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #27ae60;"></div>
+                    <span><strong>P = 2 points</strong> (Fully Correct)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f39c12;"></div>
+                    <span><strong>S = 1 point</strong> (Partially Correct)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e74c3c;"></div>
+                    <span><strong>F = 0 points</strong> (Incorrect)</span>
+                </div>
+                <div class="legend-item">
+                    <span><strong>Minimum passing score: 90/100</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Section 1: Communication with Dispatch -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">1. Communication with Dispatch</div>
+                    <div class="section-score"><span class="section-current-score">0</span>/16 points</div>
+                </div>
+                <div class="section-content">
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet successfully performed the appropriate radio transmission for when going on shift or "10-41"</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet successfully performed the appropriate radio transmission for when going off shift or "10-42"</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet successfully performed the appropriate radio transmission in response to a status/location update or "10-21"</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet successfully performed the appropriate radio transmission for when they are conducting a traffic stop or a "10-38"</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet successfully performed the appropriate radio transmission for when they are conducting a felony stop or a "10-39"</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet successfully performed the appropriate radio transmission for when they conclude a situation or "10-99"</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet successfully performed the appropriate radio transmission for when requesting an additional or a "10-70"</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet successfully performed the appropriate radio transmission for when responding to a backup call</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Call System Usage -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">2. Call System Usage</div>
+                    <div class="section-score"><span class="section-current-score">0</span>/4 points</div>
+                </div>
+                <div class="section-content">
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet successfully explained the appropriate panic command. /panic</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">When presented with a mock response situation, the cadet successfully and rapidly responded to a back-up call</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Arrest Procedure and Booking -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">3. Arrest Procedure and Booking</div>
+                    <div class="section-score"><span class="section-current-score">0</span>/22 points</div>
+                </div>
+                <div class="section-content">
+                    <div class="evaluation-item">
+                        <div class="item-text">Cuff the suspect</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Provide BLS (if injured)</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Frisk the suspect for weapons, ID and contraband</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Read the Miranda Rights</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Placed suspect into a cruiser</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Take a mugshot of the suspect</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Take the suspect's fingerprints</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Places the suspect in the cell</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Places the suspect's charges</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Radio over to DOC for Transport if any</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Sent to jail from prison</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Properly logged evidence</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Scene Management -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">4. Scene Management</div>
+                    <div class="section-score"><span class="section-current-score">0</span>/6 points</div>
+                </div>
+                <div class="section-content">
+                    <div class="evaluation-item">
+                        <div class="item-text">When presented with a mock situation, the prioritized scene management in this order. Assessed the area, rerouted traffic, provided BLS/process suspects, cleared debris/take pictures</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">When asked who can clear the cadet from the scene, the cadet responded properly with "the supervisor managing the scene"</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">When asking the cadet what they would do in a situation in which multiple 10-15s are needed to be processed at a scene, the cadet would respond with assigning themselves to a 10-15 and began processing</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Use of Force Deployment -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">5. Use of Force Deployment</div>
+                    <div class="section-score"><span class="section-current-score">0</span>/10 points</div>
+                </div>
+                <div class="section-content">
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet demonstrated understanding of Force Level 1 (Presence)</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet demonstrated understanding of Force Level 2 (Verbal)</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet demonstrated understanding of Force Level 3 (Hands on)</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet demonstrated understanding of Force Level 4 (less than lethal force)</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet demonstrated understanding of Force Level 5 (lethal force)</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">When asked when it is appropriate to open fire on a vehicle, the cadet successfully answers "When it is a threat to officers lives ex. ramming, running over officers, etc."</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 6: Law Enforcement Processes -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">6. Law Enforcement Processes</div>
+                    <div class="section-score"><span class="section-current-score">0</span>/6 points</div>
+                </div>
+                <div class="section-content">
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet demonstrated understanding of Probable Cause and provide 2 examples of it (ex. giving out a fine for clocking a speed above the legal limit, impounding a car based on a plate associated with a car involved in a previous crime, witnessing an individual committing a crime)</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">When presented with the question. "When conducting a traffic stop, how many occupants are being actively detained?" the cadet would respond with. "all of the occupants are detained"</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 7: Traffic Stop Conduct -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">7. Traffic Stop Conduct</div>
+                    <div class="section-score"><span class="section-current-score">0</span>/10 points</div>
+                </div>
+                <div class="section-content">
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet initiated lights and sirens appropriately when starting the mock 10-38</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet radioed in the appropriate callout when initiating the 10-38 to a mock dispatch</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet looked up the plate of the vehicle at any point during the 10-38</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet inspected the license of the driver at any point during the 10-38</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet concluded the 10-38 with the appropriate 10-99 radio call</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 8: Felony Stop Conduct -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">8. Felony Stop Conduct</div>
+                    <div class="section-score"><span class="section-current-score">0</span>/16 points</div>
+                </div>
+                <div class="section-content">
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet initiated lights and sirens appropriately when starting the mock 10-39</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet radioed in the appropriate callout when initiating the 10-39 to a mock dispatch</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet looked up the plate of the vehicle at any point during the 10-39</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">When asked at least how many additional units should the cadet call for prior to going CODE 6, the cadet would answer. "at least two additional 10-70s"</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Command the driver to turn off the vehicle and throw the keys out of the window</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Command the driver to step out with their hands extended in the air</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Command the driver to lift up their shirt (exposing the waistline) and perform a 360 degree spin and drop any weapons they may have</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Command the driver to walk backwards to the sound of the their voice till the cadet is within cuffing distance</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 9: Vehicle Pursuit Operations -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">9. Vehicle Pursuit Operations</div>
+                    <div class="section-score"><span class="section-current-score">0</span>/10 points</div>
+                </div>
+                <div class="section-content">
+                    <div class="evaluation-item">
+                        <div class="item-text">When initiating a pursuit, the cadet made the appropriate radio callout to a mock dispatch</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">Whilst in a pursuit, the cadet made proper callouts in regards to changes in location and direction of the fleeing vehicle</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">When asking the cadet to perform a P.I.T maneuver, the cadet asked for permission prior to performing it</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">The cadet performed a successful P.I.T maneuver</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                    <div class="evaluation-item">
+                        <div class="item-text">When asked how many vehicles can operate in a pursuit line, the cadet correctly answers. "5"</div>
+                        <div class="score-buttons">
+                            <button class="score-btn p" onclick="setScore(this, 2)">P (2)</button>
+                            <button class="score-btn s" onclick="setScore(this, 1)">S (1)</button>
+                            <button class="score-btn f" onclick="setScore(this, 0)">F (0)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables to track scores
+        let totalScore = 0;
+        let evaluatedItems = 0;
+        let totalItems = 0;
+
+        // Initialize the form
+        document.addEventListener('DOMContentLoaded', function() {
+            // Count total evaluation items
+            totalItems = document.querySelectorAll('.evaluation-item').length;
+            updateDisplay();
+        });
+
+        // Function to set score for an evaluation item
+        function setScore(button, score) {
+            const scoreButtons = button.parentElement;
+            const evaluationItem = scoreButtons.parentElement;
+            
+            // Remove active class from all buttons in this group
+            const allButtons = scoreButtons.querySelectorAll('.score-btn');
+            allButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            button.classList.add('active');
+            
+            // Store the score in the evaluation item
+            const previousScore = parseInt(evaluationItem.dataset.score) || 0;
+            const wasEvaluated = evaluationItem.dataset.evaluated === 'true';
+            
+            evaluationItem.dataset.score = score;
+            evaluationItem.dataset.evaluated = 'true';
+            
+            // Update total score
+            if (wasEvaluated) {
+                totalScore = totalScore - previousScore + score;
+            } else {
+                totalScore += score;
+                evaluatedItems++;
+            }
+            
+            // Update section score
+            updateSectionScore(evaluationItem);
+            
+            // Update overall display
+            updateDisplay();
+        }
+
+        // Function to update section score
+        function updateSectionScore(evaluationItem) {
+            const section = evaluationItem.closest('.section');
+            const sectionItems = section.querySelectorAll('.evaluation-item');
+            let sectionScore = 0;
+            
+            sectionItems.forEach(item => {
+                if (item.dataset.evaluated === 'true') {
+                    sectionScore += parseInt(item.dataset.score);
+                }
+            });
+            
+            const sectionScoreElement = section.querySelector('.section-current-score');
+            sectionScoreElement.textContent = sectionScore;
+        }
+
+        // Function to update the main display
+        function updateDisplay() {
+            // Update current score
+            document.getElementById('currentScore').textContent = totalScore;
+            
+            // Update percentage
+            const percentage = totalItems > 0 ? Math.round((totalScore / 100) * 100) : 0;
+            document.getElementById('percentage').textContent = percentage + '%';
+            
+            // Update pass/fail status
+            const passStatusElement = document.getElementById('passStatus');
+            if (evaluatedItems === 0) {
+                passStatusElement.textContent = 'Not Evaluated';
+                passStatusElement.className = 'pass-status';
+            } else if (evaluatedItems < totalItems) {
+                passStatusElement.textContent = 'In Progress';
+                passStatusElement.className = 'pass-status';
+            } else {
+                if (totalScore >= 90) {
+                    passStatusElement.textContent = 'PASS';
+                    passStatusElement.className = 'pass-status pass';
+                } else {
+                    passStatusElement.textContent = 'FAIL';
+                    passStatusElement.className = 'pass-status fail';
+                }
+            }
+        }
+
+        // Function to reset all scores
+        function resetEvaluation() {
+            if (confirm('Are you sure you want to reset all scores? This action cannot be undone.')) {
+                // Reset all buttons
+                document.querySelectorAll('.score-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Reset all evaluation items
+                document.querySelectorAll('.evaluation-item').forEach(item => {
+                    delete item.dataset.score;
+                    delete item.dataset.evaluated;
+                });
+                
+                // Reset global variables
+                totalScore = 0;
+                evaluatedItems = 0;
+                
+                // Reset section scores
+                document.querySelectorAll('.section-current-score').forEach(element => {
+                    element.textContent = '0';
+                });
+                
+                // Update display
+                updateDisplay();
+            }
+        }
+
+        // Function to export results
+        function exportResults() {
+            const currentDate = new Date().toLocaleDateString();
+            const currentTime = new Date().toLocaleTimeString();
+            const percentage = Math.round((totalScore / 100) * 100);
+            const passStatus = totalScore >= 90 ? 'PASS' : 'FAIL';
+            
+            let exportText = `*FIELD TRAINING SESSION #3*
+Observatory/Eval Phase 
+
+Date: ${currentDate}
+Time: ${currentTime}
+
+*Tally the score of P's, S's, and F's. The minimum score for passing is 90/100.
+P = 2 Fully Correct
+S = 1 Partially Correct 
+F = 0 Incorrect 
+
+`;
+
+            // Process each section
+            document.querySelectorAll('.section').forEach(section => {
+                const sectionTitle = section.querySelector('.section-title').textContent;
+                const sectionItems = section.querySelectorAll('.evaluation-item');
+                let sectionScore = 0;
+                
+                // Calculate section score
+                sectionItems.forEach(item => {
+                    if (item.dataset.evaluated === 'true') {
+                        sectionScore += parseInt(item.dataset.score);
+                    }
+                });
+                
+                // Extract section points from title
+                const pointsMatch = sectionTitle.match(/\((\d+) points?\)/);
+                const maxPoints = pointsMatch ? pointsMatch[1] : '';
+                
+                exportText += `Evaluate the cadet's ${sectionTitle.replace(/^\d+\.\s*/, '').replace(/\s*\(\d+ points?\)/, '')}. (${maxPoints} points)\n\n`;
+
+                sectionItems.forEach(item => {
+                    const itemText = item.querySelector('.item-text').textContent;
+                    const score = parseInt(item.dataset.score);
+                    const evaluated = item.dataset.evaluated === 'true';
+                    
+                    let mark = '[ ]';
+                    if (evaluated) {
+                        if (score === 2) mark = '[P]';
+                        else if (score === 1) mark = '[S]';
+                        else if (score === 0) mark = '[F]';
+                    }
+                    
+                    exportText += `${mark} ${itemText}\n`;
+                });
+                
+                exportText += '\n--\n';
+            });
+
+            exportText += `Final Score.
+${totalScore}/100 (${percentage}%) - ${passStatus}`;
+
+            // Create and download text file
+            const dataBlob = new Blob([exportText], {type: 'text/plain'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `training_evaluation_${new Date().toISOString().split('T')[0]}.txt`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Function to print results
+        function printResults() {
+            window.print();
+        }
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                resetEvaluation();
+            }
+            if (e.ctrlKey && e.key === 'e') {
+                e.preventDefault();
+                exportResults();
+            }
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                printResults();
+            }
+        });
+    </script>
+</body>
+</html>
+
