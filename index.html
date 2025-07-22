@@ -7,33 +7,35 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom styles for better aesthetics and specific overrides */
+        /* Custom styles for dark mode aesthetics and specific overrides */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5; /* Light gray background */
-            color: #333;
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
         }
         .container {
             max-width: 900px; /* Max width for content */
+            background-color: #2d3748; /* Slightly lighter dark for container */
         }
         .section-title {
-            border-bottom: 2px solid #e2e8f0; /* Light border under titles */
+            border-bottom: 2px solid #4a5568; /* Darker border under titles */
             padding-bottom: 0.5rem;
             margin-bottom: 1.5rem;
+            color: #cbd5e0; /* Lighter text for titles */
         }
         .evaluation-item {
             display: flex;
             flex-direction: column;
             margin-bottom: 1rem;
             padding: 1rem;
-            background-color: #ffffff;
+            background-color: #4a5568; /* Darker background for items */
             border-radius: 0.75rem; /* Rounded corners for items */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow */
         }
         .item-text {
             font-weight: 500;
             margin-bottom: 0.75rem;
-            color: #1a202c; /* Darker text for readability */
+            color: #e2e8f0; /* Light text for readability */
         }
         .radio-group {
             display: flex;
@@ -45,61 +47,60 @@
             cursor: pointer;
             padding: 0.5rem 1rem;
             border-radius: 9999px; /* Pill shape */
-            border: 1px solid #cbd5e0; /* Light border */
+            border: 1px solid #718096; /* Lighter border */
             transition: all 0.2s ease-in-out;
             font-weight: 600;
-            color: #4a5568;
+            color: #cbd5e0; /* Light text for labels */
             position: relative; /* For potential checkmark icon */
         }
         .radio-label input[type="radio"] {
             display: none; /* Hide default radio button */
         }
         .radio-label input[type="radio"]:checked + span {
-            background-color: #4299e1; /* Blue for checked state */
+            background-color: #63b3ed; /* Brighter blue for checked state */
             color: #ffffff;
-            border-color: #4299e1;
-            box-shadow: 0 2px 4px rgba(66, 153, 225, 0.3); /* Blue shadow */
+            border-color: #63b3ed;
+            box-shadow: 0 2px 4px rgba(99, 179, 237, 0.3); /* Blue shadow */
         }
         .radio-label span {
             display: inline-block;
             padding: 0.25rem 0.5rem;
             border-radius: 9999px;
             transition: all 0.2s ease-in-out;
-            /* Added for better visual feedback */
             box-shadow: inset 0 0 0 0px rgba(0,0,0,0.1); /* Subtle inner shadow for unselected */
         }
         .radio-label:hover span {
-            background-color: #e2f0fc; /* Lighter blue on hover */
-            color: #2b6cb0;
-            border-color: #a0aec0; /* Slightly darker border on hover */
+            background-color: #4299e1; /* Blue on hover */
+            color: #ffffff;
+            border-color: #63b3ed; /* Slightly darker border on hover */
         }
         /* Specific style for the "empty" state radio button */
         .radio-label.empty-option input[type="radio"]:checked + span {
-            background-color: #edf2f7; /* Very light gray for empty */
-            color: #4a5568;
-            border-color: #a0aec0; /* Darker border for empty */
+            background-color: #2d3748; /* Dark gray for empty */
+            color: #cbd5e0;
+            border-color: #718096; /* Darker border for empty */
             box-shadow: none;
         }
 
         .score-display {
-            background-color: #e0f2f7; /* Light blue background for score */
+            background-color: #4a5568; /* Darker blue background for score */
             padding: 1.5rem;
             border-radius: 0.75rem;
             text-align: center;
             font-size: 1.5rem;
             font-weight: bold;
-            color: #2c5282;
+            color: #e2e8f0; /* Light text */
             margin-top: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
         .pass {
-            color: #2f855a; /* Green for pass */
+            color: #48bb78; /* Green for pass */
         }
         .fail {
-            color: #e53e3e; /* Red for fail */
+            color: #fc8181; /* Red for fail */
         }
         .button-primary {
-            background-color: #4299e1;
+            background-color: #63b3ed; /* Brighter blue */
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 0.75rem;
@@ -108,15 +109,15 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .button-primary:hover {
-            background-color: #3182ce;
+            background-color: #4299e1; /* Darker blue on hover */
             transform: translateY(-2px);
         }
         .button-primary:active {
             transform: translateY(0);
         }
         .button-secondary {
-            background-color: #e2e8f0;
-            color: #4a5568;
+            background-color: #718096; /* Darker gray for secondary */
+            color: #e2e8f0;
             padding: 0.75rem 1.5rem;
             border-radius: 0.75rem;
             font-weight: bold;
@@ -124,7 +125,8 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .button-secondary:hover {
-            background-color: #cbd5e0;
+            background-color: #a0aec0; /* Lighter gray on hover */
+            color: #2d3748;
             transform: translateY(-2px);
         }
         .button-secondary:active {
@@ -149,8 +151,9 @@
         .exported-content {
             white-space: pre-wrap; /* Preserve whitespace and line breaks */
             font-family: monospace; /* Monospace font for code-like output */
-            background-color: #f8f8f8;
-            border: 1px solid #e2e8f0;
+            background-color: #2d3748; /* Dark background for exported content */
+            color: #e2e8f0; /* Light text */
+            border: 1px solid #4a5568;
             padding: 1.5rem;
             border-radius: 0.75rem;
             margin-top: 2rem;
@@ -161,7 +164,7 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #4CAF50; /* Green */
+            background-color: #48bb78; /* Green */
             color: white;
             padding: 15px 20px;
             border-radius: 8px;
@@ -176,20 +179,67 @@
         textarea.import-textarea {
             width: 100%;
             min-height: 150px;
-            border: 1px solid #cbd5e0;
+            border: 1px solid #718096; /* Darker border */
             border-radius: 0.5rem;
             padding: 0.75rem;
             font-family: monospace;
             resize: vertical;
+            background-color: #4a5568; /* Darker background */
+            color: #e2e8f0; /* Light text */
+        }
+
+        /* Custom Confirmation Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001; /* Above message box */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #2d3748; /* Dark background for modal */
+            color: #e2e8f0; /* Light text */
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+        .modal-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.125rem;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
         }
     </style>
 </head>
 <body class="p-4 sm:p-8">
-    <div class="container mx-auto bg-white p-6 sm:p-10 rounded-xl shadow-lg my-8">
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-center mb-6 text-gray-800">FIELD TRAINING SESSION #3</h1>
-        <h2 class="text-2xl sm:text-3xl font-semibold text-center mb-8 text-gray-600">Observatory/Eval Phase</h2>
+    <div class="container mx-auto p-6 sm:p-10 rounded-xl shadow-lg my-8">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center mb-6">FIELD TRAINING SESSION #3</h1>
+        <h2 class="text-2xl sm:text-3xl font-semibold text-center mb-8">Observatory/Eval Phase</h2>
 
-        <p class="text-lg text-center mb-8 text-gray-700">
+        <p class="text-lg text-center mb-8">
             Tally the score of P's, S's, and F's. The minimum score for passing is 90/100. <br>
             <span class="font-bold">P = 2 Fully Correct</span> |
             <span class="font-bold">S = 1 Partially Correct</span> |
@@ -200,6 +250,7 @@
             <textarea id="import-textarea" class="import-textarea hidden" placeholder="Paste your evaluation results here..."></textarea>
             <button id="toggle-import-textarea" class="button-primary">Show/Hide Import Area</button>
             <button id="import-button" class="button-primary hidden">Load from Text</button>
+            <button id="clear-all-button" class="button-secondary">Clear All</button> <!-- Moved to top -->
         </div>
 
         <div id="evaluation-sections">
@@ -213,7 +264,6 @@
 
         <div class="flex justify-center mt-8 gap-4">
             <button id="view-evaluation-button" class="button-primary">View Evaluation</button>
-            <button id="clear-all-button" class="button-secondary">Clear All</button>
         </div>
 
         <div id="exported-output" class="exported-content hidden">
@@ -224,6 +274,17 @@
     </div>
 
     <div id="message-box" class="message-box hidden"></div>
+
+    <!-- Custom Confirmation Modal -->
+    <div id="confirm-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <p id="confirm-modal-message"></p>
+            <div class="modal-buttons">
+                <button id="confirm-modal-yes" class="button-primary">Yes</button>
+                <button id="confirm-modal-no" class="button-secondary">No</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Array to store evaluation data
@@ -359,9 +420,16 @@
         const importButton = document.getElementById('import-button');
         const toggleImportTextareaButton = document.getElementById('toggle-import-textarea');
         const copyButton = document.getElementById('copy-button');
-        const clearAllButton = document.getElementById('clear-all-button'); // New clear all button
+        const clearAllButton = document.getElementById('clear-all-button');
         const messageBox = document.getElementById('message-box');
 
+        // Modal elements
+        const confirmModalOverlay = document.getElementById('confirm-modal-overlay');
+        const confirmModalMessage = document.getElementById('confirm-modal-message');
+        const confirmModalYesButton = document.getElementById('confirm-modal-yes');
+        const confirmModalNoButton = document.getElementById('confirm-modal-no');
+
+        let confirmCallback = null; // To store the callback for the modal
 
         /**
          * Displays a temporary message box.
@@ -372,14 +440,48 @@
             messageBox.textContent = message;
             messageBox.className = 'message-box show'; // Reset classes
             if (type === 'success') {
-                messageBox.style.backgroundColor = '#4CAF50'; // Green
+                messageBox.style.backgroundColor = '#48bb78'; /* Green for success in dark mode */
             } else if (type === 'error') {
-                messageBox.style.backgroundColor = '#f44336'; // Red
+                messageBox.style.backgroundColor = '#fc8181'; /* Red for error in dark mode */
             }
             setTimeout(() => {
                 messageBox.classList.remove('show');
             }, 3000); // Hide after 3 seconds
         }
+
+        /**
+         * Shows the custom confirmation modal.
+         * @param {string} message - The message to display in the modal.
+         * @param {function} callback - Function to call with true/false based on user's choice.
+         */
+        function showConfirmModal(message, callback) {
+            confirmModalMessage.textContent = message;
+            confirmCallback = callback;
+            confirmModalOverlay.classList.add('show');
+        }
+
+        /**
+         * Hides the custom confirmation modal.
+         */
+        function hideConfirmModal() {
+            confirmModalOverlay.classList.remove('show');
+            confirmCallback = null;
+        }
+
+        // Event listeners for the custom modal buttons
+        confirmModalYesButton.addEventListener('click', () => {
+            if (confirmCallback) {
+                confirmCallback(true);
+            }
+            hideConfirmModal();
+        });
+
+        confirmModalNoButton.addEventListener('click', () => {
+            if (confirmCallback) {
+                confirmCallback(false);
+            }
+            hideConfirmModal();
+        });
 
         /**
          * Saves the current evaluation state to local storage.
@@ -438,7 +540,7 @@
 
                 // Section title
                 const sectionTitle = document.createElement('h3');
-                sectionTitle.className = 'text-xl sm:text-2xl font-semibold mb-4 text-gray-700 section-title';
+                sectionTitle.className = 'text-xl sm:text-2xl font-semibold mb-4 section-title';
                 sectionTitle.textContent = `${section.category} (${section.maxPoints} points)`;
                 sectionDiv.appendChild(sectionTitle);
 
@@ -588,26 +690,25 @@
          * Clears all selected evaluation items and resets the score.
          */
         function clearEvaluation() {
-            // Confirm with user before clearing
-            if (!confirm('Are you sure you want to clear all evaluation data? This cannot be undone.')) {
-                return;
-            }
-
-            // Reset all statuses and scores
-            for (const itemId in itemStatuses) {
-                itemStatuses[itemId] = ''; // Set to empty status
-                itemScores[itemId] = 0;     // Set score to 0
-            }
-            renderEvaluationSections(); // Re-render to update UI
-            saveEvaluationState(); // Save the cleared state
-            showMessageBox('Evaluation cleared successfully!');
-            // Ensure we are back on the evaluation form view
-            if (!evaluationSectionsDiv.classList.contains('hidden')) {
-                exportedOutputDiv.classList.add('hidden');
-                evaluationSectionsDiv.classList.remove('hidden');
-                scoreDisplayDiv.classList.remove('hidden');
-                viewEvaluationButton.textContent = 'View Evaluation';
-            }
+            showConfirmModal('Are you sure you want to clear all evaluation data? This cannot be undone.', (confirmed) => {
+                if (confirmed) {
+                    // Reset all statuses and scores
+                    for (const itemId in itemStatuses) {
+                        itemStatuses[itemId] = ''; // Set to empty status
+                        itemScores[itemId] = 0;     // Set score to 0
+                    }
+                    renderEvaluationSections(); // Re-render to update UI
+                    saveEvaluationState(); // Save the cleared state
+                    showMessageBox('Evaluation cleared successfully!');
+                    // Ensure we are back on the evaluation form view
+                    if (!evaluationSectionsDiv.classList.contains('hidden')) {
+                        exportedOutputDiv.classList.add('hidden');
+                        evaluationSectionsDiv.classList.remove('hidden');
+                        scoreDisplayDiv.classList.remove('hidden');
+                        viewEvaluationButton.textContent = 'View Evaluation';
+                    }
+                }
+            });
         }
 
         /**
